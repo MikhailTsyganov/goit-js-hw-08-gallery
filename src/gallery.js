@@ -3,7 +3,8 @@ import galleryItems from './app.js';
 const ulEl = document.querySelector('.js-gallery');
 const modalEl = document.querySelector('.js-lightbox')
 const modalImgEl = document.querySelector('.lightbox__image')
-const closeBtnEl = document.querySelector('.lightbox__button')
+const closeBtnEl = document.querySelector('[data-action="close-lightbox"]')
+const overlayEl = document.querySelector('.lightbox__overlay')
 
 
 const makeImageMarkUp = galleryItems.map(item => {
@@ -30,19 +31,38 @@ ulEl.addEventListener('click', onClick)
 
 function onClick(e) {
     if(e.target.nodeName !== 'IMG') {return}
-    console.log(e.target.dataset.source);
 
     modalEl.classList.add('is-open');
+    window.addEventListener('keydown', onEscClose);
 
     modalImgEl.src = e.target.dataset.source;
     modalImgEl.alt = e.target.alt;
 }
 
-
-closeBtnEl.addEventListener('click', onCloseModal);
-
-function onCloseModal() {
+function closeModal() {
     modalEl.classList.remove('is-open');
     modalImgEl.src = '';
     modalImgEl.alt = '';
+    window.removeEventListener('keydown', onEscClose);
+}
+
+
+closeBtnEl.addEventListener('click', onBtnCloseModal);
+
+function onBtnCloseModal() {
+    closeModal()
+}
+
+
+overlayEl.addEventListener('click', onCloseModalOnOverlay);
+
+
+function onCloseModalOnOverlay() {
+    closeModal()
+}
+
+
+function onEscClose(e) {
+    if(e.code === 'Escape') {closeModal()}
+    
 }
