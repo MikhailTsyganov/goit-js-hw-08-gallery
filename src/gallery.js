@@ -34,6 +34,7 @@ function onClick(e) {
 
     modalEl.classList.add('is-open');
     window.addEventListener('keydown', onEscClose);
+    window.addEventListener('keydown', onSwitch);
 
     modalImgEl.src = e.target.dataset.source;
     modalImgEl.alt = e.target.alt;
@@ -44,6 +45,7 @@ function closeModal() {
     modalImgEl.src = '';
     modalImgEl.alt = '';
     window.removeEventListener('keydown', onEscClose);
+    window.removeEventListener('keydown', onSwitch);
 }
 
 
@@ -66,3 +68,34 @@ function onEscClose(e) {
     if(e.code === 'Escape') {closeModal()}
     
 }
+
+const array = galleryItems.map(item => {
+    return item.original;
+})
+
+
+function onSwitch(e) {
+  let value = 0;
+
+  let index = array.indexOf(modalImgEl.src);
+  
+    if (e.code === 'ArrowRight') {
+      if (index < array.length - 1) {
+        value = index + 1;
+      
+      modalImgEl.src = array[value]
+      } else { modalImgEl.src = array[array.length - 1]}
+      
+    }
+         
+    
+  if (e.code === 'ArrowLeft') {
+      if (index > 0) {
+        value = index - 1;
+      modalImgEl.src = array[value]
+      } else {modalImgEl.src = array[0]}
+      
+    }
+}
+
+
